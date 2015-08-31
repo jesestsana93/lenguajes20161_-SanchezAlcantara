@@ -10,7 +10,7 @@
 ---------------------------------
 
 |#
-
+Sección I
 #|
 EJERCICIO 1
 Pow eleva un numero z a la potencia w
@@ -91,6 +91,29 @@ evaluar y una constante 2
 (test (primes 30) '(2 3 5 7 11 13 17 19 23 29))
 (test (primes 7) '(2 3 5 7))
 
+#|EJERCICIO 4
+zip - Dadas dos listas, regresar una cuyos elementos son listas de tamaño dos, tal que para la i-ésima lista, el primer
+elemento es el i-ésimo de la primera lista original, y el segundo elemento es el i-ésimo de la segunda lista original,
+si una lista es de menor tamaño que la otra, la lista resultante es del tamaño de la menor, y si una de las listas es vacía,
+regresa una lista vacía|#
+(define (zip l1 l2)
+  (if (or (empty? l1) (empty? l2))
+      empty
+      (cons (list (car l1) (car l2)) (zip (cdr l1) (cdr l2)))))
+
+
+#|EJERCICIO 5
+reduce - Dada una función de aridad 2 y una lista de n elementos, regresar la evaluación de la función
+encadenada de todos los elementos|#
+(define reduce (lambda (f l)
+                 (if (eq? (cdr l) empty)
+                 (car l)
+                 (f (car l) (reduce f (cdr l))))))
+
+;-----------
+;Sección II |
+;-----------
+
 
 ;;EJERCICIO 6------------------------------------
 ;;concatena 2 listas
@@ -125,6 +148,17 @@ mmap aplica una función a los elementos de una lista
   [test (mmap  sqrt '(4 16 81 49)) '(2 4 9 7)]
   [test (mmap  sqr '(4 16 81 49)) '(16 256 6561 2401)]
   [test (mmap  abs '(-4 16 -81.9 4.9)) '(4 16 81.9 4.9)]
+
+#|EJERCICIO 8-----------------------------------
+mfilter - Dado un predicado de un argumento y una lista, regresa la lista original sin los elementos que al aplicar
+el predicado, regrese falso|#
+(define (mfilter p l)
+  (cond
+    [(empty? l) empty]
+    [(eq? (p (car l)) #t) (cons (car l) (mfilter p (cdr l)))]
+    [else (mfilter p (cdr l))]))
+
+
 
 #|
 Ejercicio  11
