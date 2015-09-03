@@ -171,7 +171,78 @@ EJERCICIO 10
 (test (every? number? '()) #f)
 (test (every? number? '(a b v 4 c)) #f)
 (test (every? list? '(a b c)) #f)
-(test (every? list? '('(a b c) '())) #t);;?
+(test (every? boolean? '(#f #t 3 #t)) #f)
 (test (every? symbol? '(a b c d)) #f)
 
 
+#|EJERCICIO 4
+zip - Dadas dos listas, regresar una cuyos elementos son listas de tamaño dos, tal que para la i-ésima lista, el primer
+elemento es el i-ésimo de la primera lista original, y el segundo elemento es el i-ésimo de la segunda lista original,
+si una lista es de menor tamaño que la otra, la lista resultante es del tamaño de la menor, y si una de las listas es vacía,
+regresa una lista vacía|#
+ (define (zip l1 l2)
+  (if (or (empty? l1) (empty? l2))
+  empty
+  (cons (list (car l1) (car l2)) (zip (cdr l1) (cdr l2)))))
+ 
+ (test (zip '(1 2) '(3 4)) '((1 3) (2 4)))
+ (test (zip '() '()) '())
+ (test (zip '(8 9) '(3 2 1 4)) '((8 3) (9 2)))
+ (test (zip '(1) '(11 12 13)) '((1 11)))
+ (test (zip '(1 2 3 4) '(1)) '((1 1)))
+
+#|EJERCICIO 5
+reduce - Dada una función de aridad 2 y una lista de n elementos, regresar la evaluación de la función
+encadenada de todos los elementos|#
+(define reduce (lambda (f l)
+(if (eq? (cdr l) empty)
+(car l)
+(f (car l) (reduce f (cdr l))))))
+
+
+(test (reduce + '(1 2 3 4 5 6 7 8 9 10)) 55)
+(test (reduce - '(1 1)) 0)
+(test (reduce / '(81 9)) 9)
+(test (reduce zip '((1 2 3) (4 5 6) (7 8 9))) '((1 (4 7)) (2 (5 8)) (3 (6 9))) )
+(test (reduce * '(1 2 3 4) ) 24)
+
+#|EJERCICIO 8-----------------------------------
+mfilter - Dado un predicado de un argumento y una lista, regresa la lista original sin los elementos que al aplicar
+el predicado, regrese falso|#
+(define (mfilter p l)
+(cond
+[(empty? l) empty]
+[(eq? (p (car l)) #t) (cons (car l) (mfilter p (cdr l)))]
+[else (mfilter p (cdr l))]))
+
+(test (mfilter (lambda (x) (not (zero? x))) '(2 0 1 4 0)) '(2 1 4))
+(test (mfilter (lambda (l) (not (empty? l))) '((1 4 2) () (2 4) ())) '((1 4 2) (2 4)))
+(test (mfilter (lambda (n) (= (modulo n 2) 0)) '(1 2 3 4 5 6)) '(2 4 6))
+(test (mfilter (lambda (x) (number? x)) '(2 w 1 y 0)) '(2 1 0))
+
+
+#|
+EJERCICIO 2
+|#
+(define (average lst)
+  ;(if (empty? (cdr lst))
+  (if (empty? lst)
+      ;(car lst)
+      '()
+      (/ (suma lst) (longitud lst))))
+
+(define (suma lst)
+  (if (empty? (cdr lst))
+      (car lst)
+      (+ (first lst) (suma (cdr lst)))))
+
+(define (longitud lst)
+  (if (empty? (cdr lst))
+      1
+      (+ 1 (longitud (cdr lst)))))
+
+(test(average '(1)) 1)
+(test(average '()) '())
+(test(average '(1 2 3 4 5)) 3)
+(test(average '(10 10 9 8 8)) 9)
+(test(average '(10 10 9 9 8)) 9.2)
