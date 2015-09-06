@@ -4,7 +4,7 @@
 #|
 --------------------------------
 |  Lenguajes de programación     |
-|  Práctica 1                    |
+|  Práctica 2                    |
 |  Guerrero Chávez Diana Lucía   |
 | Sánchez Alcántara Jesús Esteban|
 
