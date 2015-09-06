@@ -12,6 +12,33 @@
 
 |#
 
+;SECCION I
+
+#|
+1. Array - Definir un tipo de dato Array que tenga un constructor de tipo MArray. El entero sirve para definir
+el tamaño del arreglo.
+|#
+(define-type Array
+  [MArray (n number?)
+            (l (listof number?))])
+
+#|
+2. List - Definir un tipo de dato recursivo llamado MList que tenga a la lista vacia MEmpty y el constructor de
+tipo MCons.
+|#
+(define-type MList
+  [MEmpty]
+  [MCons (n number?)
+         (rest MList?)])
+
+#|
+3. NTree - Definir un tipo de dato recursivo llamado NTree que tenga como una hoja nula TLEmpty y un
+constructor de tipo NodeN (estos arboles son n-arios)
+|#
+(define-type NTree
+  [TLEmpty]
+  [NodeN (n number?)
+         (l (listof NTree?))])
 
 
 #|
@@ -47,6 +74,63 @@ Figure
 (test (Rectangle (2D-Point -11 -2.2) 12 12) (Rectangle (2D-Point -11 -2.2) 12 12))
 (test (Square (2D-Point 0 0) 10) (Square (2D-Point 0 0) 10))
 
+;SECCION II
+
+#|
+6.setvalueA - Dado un arreglo de tipo Array, una posicion y un valor numerico v, regresar otro arreglo con
+el valor v intercambiado en la posicion indicada del arreglo original. En caso de que la posicion sea igual o
+mayor al tamaño especificado en el arreglo, regresar un error Out of bounds
+|#
+(define (coloca l pos v count)
+  (cond
+    [(< count pos) (cons (car l) (coloca (cdr l) pos v (add1 count)))]
+    [(> count pos) empty]
+    [(= count pos) (cons v (cdr l))]))
+
+(define (setvalueA ar pos v)
+  (if (not(Array? ar))
+      (error 'setvalueA "Unknown Type")
+      (if (> pos (- (MArray-n ar) 1))
+          (error 'setvalueA "Out of bounds")
+          (coloca (MArray-l ar) pos v 0))))
+          
+          
+ #|
+8.printML - Dada una lista de tipo MList, imprimirla en un formato legible. Puedes utilizar las funciones para
+manipular cadenas y la funcion
+|#
+(define (printML ml)
+  (if (MEmpty? ml)
+      "[]"
+      (if(MEmpty? (MCons-rest ml))
+        (string-append "[" (~a (MCons-n ml)) "]")
+         (string-append "[" (auxPrint ml) "]"))))
+ 
+(define (auxPrint ml)
+  (if (MEmpty? ml)
+      ""
+      (if(MEmpty? (MCons-rest ml))
+         (string-append (~a (MCons-n ml)))
+         (string-append (~a (MCons-n ml)) ", " (auxPrint (MCons-rest ml))))))
+
+#|
+9. concatML - Dadas dos listas de tipo MList, regresar la concatenacion
+|#
+(define (concatML ml1 ml2)
+  (if(MEmpty? ml1)
+     ml2
+      (MCons (MCons-n ml1) (concatML (MCons-rest ml1) ml2))))
+
+#|
+10.lengthML - Dada una lista de tipo MLista, regresar la cantidad de elementos que tiene
+|#
+(define (lengthML ml)
+  (if(MEmpty? ml)
+     0
+     (+ 1 (lengthML (MCons-rest ml)))))
+
+
+ 
 #|
 area
 |#
