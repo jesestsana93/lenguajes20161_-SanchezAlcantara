@@ -168,3 +168,43 @@ area
 (test (infigure (Square (2D-Point 0 0) 2) (2D-Point 1 -1)) #t)
 (test (infigure (Square (2D-Point 0 0) 2) (2D-Point 1 1)) #f)
 (test (infigure (Circle (2D-Point 0 0) 2) (2D-Point 1 2)) #f)
+
+#|
+EJERCICIO 7
+MArray2MList
+|#
+
+(define (MArray2MList lista)
+  (if (MArray? lista)
+      (if (empty? (MArray-l lista))
+          (MEmpty)
+          (MCons  (car (MArray-l lista)) (MArray2MList (MArray (MArray-n lista) (cdr (MArray-l lista))))))
+    "Error. se esperaba un tipo MArray"))
+
+(test (MArray2MList (MArray 0 '())) (MEmpty))
+(test (MArray2MList (MArray 2 '(1 2))) (MCons 1 (MCons 2 (MEmpty))))
+(test (MArray2MList (MArray 3 '(1 2 4))) (MCons 1 (MCons 2 (MCons 4 (MEmpty)))))
+(test (MArray2MList (MArray 1 '(1))) (MCons 1 (MEmpty)))
+(test (MArray2MList '(22 3)) "Error. se esperaba un tipo MArray")
+
+
+#|
+EJERCICIO 11
+mapML
+|#
+
+(define (mapML lista funcion)
+  (if (MList? lista)
+      (if (MEmpty?  lista)
+          (MEmpty)
+          (MCons [funcion (MCons-n lista)] ;obtenemos el numero y le aplicamos la funcion
+                 (mapML [MCons-rest lista] funcion)))
+    "Error. se esperaba un tipo MArray"))
+
+;(define (add1 n) (+ 1 n))
+
+(test (mapML (MCons 1 (MCons 2 (MEmpty))) add1) (MCons 2 (MCons 3 (MEmpty))))
+(test (mapML (MEmpty) add1) (MEmpty))
+(test (mapML (MCons 10 (MCons 3 (MEmpty))) (lambda (x) (* x x))) (MCons 100 (MCons 9 (MEmpty))))
+(test (mapML '(3 5 6) add1) "Error. se esperaba un tipo MArray")
+(test (mapML (MCons 3 (MCons 6 (MEmpty))) (lambda (x) (* x 2))) (MCons 6 (MCons 12 (MEmpty))))
