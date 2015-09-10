@@ -1,16 +1,7 @@
 
 #lang plai
 
-#|
---------------------------------
-|  Lenguajes de programación     |
-|  Práctica 1                    |
-|  Guerrero Chávez Diana Lucía   |
-| Sánchez Alcántara Jesús Esteban|
 
----------------------------------
-
-|#
 
 ;SECCION I
 
@@ -18,9 +9,16 @@
 1. Array - Definir un tipo de dato Array que tenga un constructor de tipo MArray. El entero sirve para definir
 el tamaño del arreglo.
 |#
+
 (define-type Array
   [MArray (n number?)
             (l (listof number?))])
+
+(test (MArray 1 '(2)) (MArray 1 '(2)))
+(test (MArray 3 '(2 3 4)) (MArray 3 '(2 3 4)))
+(test (MArray 0 '()) (MArray 0 '()))
+(test (MArray 4 '(2 3 4 5)) (MArray 4 '(2 3 4 5)))
+(test (MArray 1 '(22)) (MArray 1 '(22)))
 
 #|
 2. List - Definir un tipo de dato recursivo llamado MList que tenga a la lista vacia MEmpty y el constructor de
@@ -31,6 +29,12 @@ tipo MCons.
   [MCons (n number?)
          (rest MList?)])
 
+(test (MCons 3 (MCons 5 (MEmpty))) (MCons 3 (MCons 5 (MEmpty))))
+(test (MCons 0 (MCons 0 (MEmpty))) (MCons 0 (MCons 0 (MEmpty))))
+(test (MCons 3 (MCons 5 (MCons 9 (MEmpty)))) (MCons 3 (MCons 5 (MCons 9 (MEmpty)))))
+(test (MEmpty) (MEmpty))
+(test (MCons 3  (MEmpty)) (MCons 3 (MEmpty)))
+
 #|
 3. NTree - Definir un tipo de dato recursivo llamado NTree que tenga como una hoja nula TLEmpty y un
 constructor de tipo NodeN (estos arboles son n-arios)
@@ -39,6 +43,32 @@ constructor de tipo NodeN (estos arboles son n-arios)
   [TLEmpty]
   [NodeN (n number?)
          (l (listof NTree?))])
+
+(test (NodeN 1 (list (TLEmpty) (TLEmpty) (TLEmpty))) (NodeN 1 (list (TLEmpty) (TLEmpty) (TLEmpty))))
+
+(test (NodeN 1 (list (NodeN 2 (list (TLEmpty)))
+                     (NodeN 3 (list (TLEmpty)))
+                     (NodeN 4 (list (TLEmpty) (TLEmpty) (TLEmpty)))))
+      
+      (NodeN 1 (list (NodeN 2 (list (TLEmpty)))
+(NodeN 3 (list (TLEmpty)))
+(NodeN 4 (list (TLEmpty) (TLEmpty) (TLEmpty))))))
+
+(test (NodeN 1 (list (NodeN 2 (list (TLEmpty)))))    
+      (NodeN 1 (list (NodeN 2 (list (TLEmpty))))))
+
+(test (NodeN 11 (list (NodeN 22 (list (TLEmpty)))
+                     (NodeN 33 (list (TLEmpty)))
+                     (NodeN 44 (list (TLEmpty)))))
+      
+     (NodeN 11 (list (NodeN 22 (list (TLEmpty)))
+                     (NodeN 33 (list (TLEmpty)))
+                     (NodeN 44 (list (TLEmpty))))))
+
+(test (NodeN 1 (list  (TLEmpty) (TLEmpty)))
+      
+      (NodeN 1 (list  (TLEmpty) (TLEmpty))))
+
 
 
 #|
@@ -93,6 +123,11 @@ mayor al tamaño especificado en el arreglo, regresar un error Out of bounds
       (if (> pos (- (MArray-n ar) 1))
           (error 'setvalueA "Out of bounds")
           (coloca (MArray-l ar) pos v 0))))
+
+(define ar (MArray 5 '(0 0 0 0 0)))
+
+
+
           
           
  #|
@@ -113,6 +148,13 @@ manipular cadenas y la funcion
          (string-append (~a (MCons-n ml)))
          (string-append (~a (MCons-n ml)) ", " (auxPrint (MCons-rest ml))))))
 
+(test (printML (MEmpty)) "[]")
+(test (printML (MCons 7 (MEmpty))) "[7]")
+(test (printML (MCons 7 (MCons 4 (MEmpty)))) "[7, 4]")
+(test (printML (MCons 2 (MCons 1 (MCons 2 (MEmpty))))) "[2, 1, 2]")
+(test (printML (MCons 7 (MCons 4 (MCons 6 (MEmpty))))) "[7, 4, 6]")
+
+
 #|
 9. concatML - Dadas dos listas de tipo MList, regresar la concatenacion
 |#
@@ -120,6 +162,12 @@ manipular cadenas y la funcion
   (if(MEmpty? ml1)
      ml2
       (MCons (MCons-n ml1) (concatML (MCons-rest ml1) ml2))))
+
+(test (concatML (MCons 7 (MCons 4 (MEmpty))) (MCons 1 (MEmpty))) (MCons 7 (MCons 4 (MCons 1 (MEmpty)))))
+(test (concatML (MCons 7 (MCons 4 (MEmpty))) (MCons 1 (MCons 10 (MEmpty)))) (MCons 7 (MCons 4 (MCons 1 (MCons 10 (MEmpty))))))
+(test (concatML (MCons 7 (MCons 4 (MEmpty))) (MEmpty)) (MCons 7 (MCons 4 (MEmpty))) )
+(test (concatML  (MEmpty) (MEmpty)) (MEmpty) )
+(test (concatML (MCons 7 (MEmpty)) (MEmpty)) (MCons 7 (MEmpty)) )
 
 #|
 10.lengthML - Dada una lista de tipo MLista, regresar la cantidad de elementos que tiene
@@ -129,6 +177,12 @@ manipular cadenas y la funcion
      0
      (+ 1 (lengthML (MCons-rest ml)))))
 
+(test (lengthML (MEmpty)) 0)
+(test (lengthML (MCons 7 (MCons 4 (MCons 5 (MEmpty))))) 3)
+(test (lengthML (MCons 7 (MCons 4 (MCons 5 (MCons 0 (MEmpty)))))) 4)
+(test (lengthML (MCons 7 (MCons 4 (MCons 5 (MCons 0 (MCons 11 (MEmpty))))))) 5)
+(test (lengthML (MCons 7 (MEmpty))) 1)
+
 
  
 #|
@@ -137,10 +191,12 @@ area
 
 (define (area figurita)
   (if (Figure? figurita)
-      (cond ;revisamos que tipo de figura es
-        [(Circle? figurita) (* pi (* (Circle-radio figurita) (Circle-radio figurita)))]
-        [(Square? figurita) (* (Square-longitud figurita) (Square-longitud figurita) )]
-        [(Rectangle? figurita) (* (Rectangle-ancho figurita) (Rectangle-largo figurita))])
+  (cond
+    [(Circle? figurita) (*(* pi (Circle-radio figurita)) (Circle-radio figurita))]
+    [(Square? figurita) (* (Square-longitud figurita) (Square-longitud figurita))]
+    [(Rectangle? figurita) (* (Rectangle-largo figurita) (Rectangle-ancho figurita))]
+       )
+      
       "Error. Se necesita un tipo Figure";no es del tipo Figure
       ))
 
@@ -208,3 +264,26 @@ mapML
 (test (mapML (MCons 10 (MCons 3 (MEmpty))) (lambda (x) (* x x))) (MCons 100 (MCons 9 (MEmpty))))
 (test (mapML '(3 5 6) add1) "Error. se esperaba un tipo MArray")
 (test (mapML (MCons 3 (MCons 6 (MEmpty))) (lambda (x) (* x 2))) (MCons 6 (MCons 12 (MEmpty))))
+
+#|
+Ejercicio 12
+filterML
+|#
+
+(define (filterML funcion lista )
+  (if (MList? lista)
+      (if (MEmpty?  lista)
+          (MEmpty)
+             (if [funcion (MCons-n lista)];;si la funcion devuelve true
+                 (MCons (MCons-n lista) (filterML funcion [MCons-rest lista]) );;concatenamos el elemento
+                 (filterML funcion [MCons-rest lista] )));;no se concatena el elemento
+    "Error. se esperaba un tipo MArray"))
+
+(test (filterML (lambda (x) (not (zero? x))) (MCons 2 (MCons 0 (MCons 1 (MEmpty))))) (MCons 2 (MCons 1 (MEmpty))))
+(test (filterML (lambda (x) (not (zero? x))) '(1 2 43)) "Error. se esperaba un tipo MArray")
+(test (filterML (lambda (x) (number? x)) (MCons 2 (MCons 0 (MCons 1 (MEmpty))))) (MCons 2 (MCons 0 (MCons 1 (MEmpty)))))
+(test (filterML (lambda (x) (zero? x)) (MCons 2 (MCons 0 (MCons 1 (MEmpty)))))  (MCons 0 (MEmpty)))
+(test (filterML (lambda (x) (zero? x)) (MCons 2 (MCons 3 (MCons 1 (MEmpty))))) (MEmpty))
+
+
+
