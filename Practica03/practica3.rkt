@@ -3,6 +3,82 @@
 (require "practica3-base.rkt")
 
 #|
+EJERCICIO 1
+
+La funcion zones recibe:
+minimo- ritmo cardiaco de descanso de una persona
+maximo- el maximo ritmo cardiaco de una persona
+
+Regresa una lista de zonas de frecuencia cardiaca
+
+Formulas (con cambios para que coincida con el resultado esperado)
+rest + range * (0.5 + (0.1*(i-1))) (minimo)
+rest + range * (0.5 + (0.1*i))-1 (maximo)
+
+|#
+
+
+(define (zones rest max)
+  (let ([range (- max rest)]);;definimos una variable que se llama 'range'
+    (list
+   (resting rest (+ (- (* range 0.5) 1) rest))
+   (warm-up (+ rest (* range (+ 0.5 0)))
+            (- (+ rest (* range (+ 0.5 0.1))) 1))
+   (fat-burning (+ rest (* range (+ 0.5 0.1)))
+            (- (+ rest (* range (+ 0.5 0.2))) 1))
+   (aerobic (+ rest (* range (+ 0.5 0.2)))
+            (- (+ rest (* range (+ 0.5 0.3))) 1))
+   (anaerobic (+ rest (* range (+ 0.5 0.3)))
+            (- (+ rest (* range (+ 0.5 0.4))) 1))
+   (maximum (+ rest (* range (+ 0.5 0.4)))
+            (+ rest range))
+   )))
+
+
+#|
+EJERCICIO 2
+
+La función get-zone recibe:
+nombre- un simbolo que representa el nombre de la zona
+lst- una lista del tipo zones
+
+llama a la función get-zone-aux 
+|#
+
+(define (get-zone nombre lst)
+  (get-zone-aux nombre lst '(resting warm-up fat-burning aerobic anaerobic maximum))
+  )
+
+#|
+La función get-zone-aux recibe:
+nombre- un simbolo que representa el nombre de la zona
+lst- una lista del tipo zones
+recibe también una lista con los nombres de las zonas cardiacas 
+
+Busca recursivamente el nombre en la lista que recibió.
+
+Si encuentra el nombre en la lista, devuelve el car de lst
+
+
+Si no, hace una llamada recursiva con el mismo nombre y el el resto de las listas
+|#
+
+(define (get-zone-aux nombre lst lista) 
+  (if (eqv? nombre (car lista));;comparamos el nombre con el primer elemento de lista
+        (car lst);;con car, extraemos el elemento sin 'list'
+  (get-zone-aux nombre (cdr lst) (cdr lista) )));;llamada recursiva con el resto de los nombres de ambas listas
+
+
+
+(define my-zones (zones 50 180)) ;;definimos una lista de zonas (para las pruebas)
+
+(test (get-zone 'resting my-zones) (resting 50 114.0))
+(test (get-zone 'fat-burning my-zones) (fat-burning 128.0 140.0))
+(test (get-zone 'aerobic my-zones) (aerobic 141.0 153.0))
+(test (get-zone 'anaerobic my-zones) (anaerobic 154.0 166.0))
+(test (get-zone 'maximum my-zones)(maximum 167.0 180))
+
+#|
 EJERCICIO 3
 La función bmp->zone recibe:
  lista- una lista que contendrá dos enteros 
