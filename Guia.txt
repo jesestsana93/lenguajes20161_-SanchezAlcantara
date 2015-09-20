@@ -1,0 +1,28 @@
+
+Instalar Git, aquí hay una guia:
+
+http://rogerdudler.github.io/git-guide/index.es.html
+
+--------------------------------------------------
+Clonar del repositorio local:
+(Reemplazar DiKim07 por tu usuario)
+
+$git clone https://github.com/DiKim07/lenguajes20161_-SanchezAlcantara
+
+Una vez que clonaron el repositorio
+y modificaron el/los archivo/s
+
+desde la terminal añadimos los archivos:
+$ git add nombre_archivo
+$git add .
+
+después preparamos los archivos para subir:
+$git commit -m "Un comentario sobre el commit"
+
+luego actualizamos el repositorio:
+$git pull
+$git push
+
+Después de hacer el push, nos pedirá nuestro usuario y contraseña de Git.
+Listo! nuestro archivo acutalizado aparecerá en el repositorio de git
+
