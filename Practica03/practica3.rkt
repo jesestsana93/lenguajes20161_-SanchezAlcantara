@@ -90,6 +90,16 @@ o el máximo está dentro del rango
 (test (nnBT (BNode < (EmptyBT) 3 (BNode < (EmptyBT) 7 (EmptyBT)))) 2)
 
 ;--------------------------------------------------------------------
+;;mapBT - Dado una función de aridad 1 y un árbol de tipo BTree, aplicar la función sobre todos los valores de
+;;los nodos del árbol (las funciones de aridad 1 sólo regresas números).
+(define (mapBT f ab)
+  (if(EmptyBT? ab)
+     ab
+     (BNode (BNode-c ab) (mapBT f (BNode-l ab)) (f(BNode-e ab)) (mapBT f (BNode-r ab)))))
+
+(test (mapBT add1 (EmptyBT))(EmptyBT))
+(test (mapBT add1 (BNode < (EmptyBT) 1 (BNode < (EmptyBT) 2 (EmptyBT))))(BNode < (EmptyBT) 2 (BNode < (EmptyBT) 3 (EmptyBT))))
+
 
 ;;Recorrido en preorden
 (define (preorderBT t)
