@@ -27,3 +27,10 @@ Su función mapML esta mal implementada.
 No implementaron las funciones haversine, closest-building, buildings-at-distance y in-figure?
 
 **Calificación: 6.5**
+
+### Practica 3
+Su implementación de bpm->zone es erronea.
+No implementaron las funciones create-trackpoints, total-distance, average-hr,
+max-hr, collapse-trackpoints.
+
+**Calificación: 5**
