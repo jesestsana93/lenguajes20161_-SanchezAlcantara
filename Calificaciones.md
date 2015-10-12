@@ -34,3 +34,20 @@ No implementaron las funciones create-trackpoints, total-distance, average-hr,
 max-hr, collapse-trackpoints.
 
 **Calificación: 5**
+
+## Tareas
+
+### Tarea 2
+
+No subieron un PDF, la siguiente tarea sin PDF la calificación sera directo 0.
+
+Problema 1: No indican como FAE tiene condicionales y recursion, solo avientan
+la mención de Combinador Y y ya.
+Problema 2: Su ejemplo es igual ya sea un lenguaje perezoso o glotón, da un
+error de division por cero.
+
+Problema 3: No dan el ejemplo ni indican cuales son las diferencias.
+
+Problema 4: Nada que ver con lo que se pedia sobre evaluación perezosa y estado.
+
+**Calificación: 0**
